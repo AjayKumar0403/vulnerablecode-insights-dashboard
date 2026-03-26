@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vulnerability Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <h2 style="text-align:center;">Vulnerabilities Per Year</h2>
+
+    <div style="width:400px; height:300px; margin:auto;">
+        <canvas id="yearChart"></canvas>
+    </div>
+
+    <h2 style="text-align:center;">Severity Distribution</h2>
+
+    <div style="width:400px; height:300px; margin:auto;">
+        <canvas id="severityChart"></canvas>
+    </div>
+
+    <script>
+        // 📊 Chart 1: Vulnerabilities per year
+        fetch('/api/insights/vulnerabilities-per-year/')
+            .then(res => res.json())
+            .then(data => {
+                const labels = Object.keys(data);
+                const values = Object.values(data);
+
+                new Chart(document.getElementById('yearChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Vulnerabilities',
+                            data: values
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            });
+
+
+        // 📊 Chart 2: Severity distribution
+        fetch('/api/insights/severity/')
+            .then(res => res.json())
+            .then(data => {
+                const labels = Object.keys(data);
+                const values = Object.values(data);
+
+                new Chart(document.getElementById('severityChart'), {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Severity',
+                            data: values
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            });
+
+    </script>
+
+</body>
+
+</html>
